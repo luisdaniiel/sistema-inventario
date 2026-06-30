@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <h1>Compras</h1>
+
+    <a href="/compras/nueva"
+       class="btn btn-success">
+       + Nueva Compra
+    </a>
+
+</div>
+<form method="GET" action="/compras" class="mb-3">
+
+    <div class="input-group">
+
+        <input
+            type="text"
+            name="busqueda"
+            class="form-control"
+            placeholder="Buscar proveedor..."
+            value="{{ busqueda }}">
+
+        <button class="btn btn-primary">
+            Buscar
+        </button>
+
+    </div>
+
+</form>
+
+<table class="table table-bordered table-hover bg-white">
+
+    <thead class="table-dark">
+
+        <tr>
+            <th>ID</th>
+            <th>Fecha</th>
+            <th>Proveedor</th>
+            <th>Total</th>
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        {% for compra in compras %}
+
+        <tr>
+
+            <td>{{ compra.id_compra }}</td>
+            <td>{{ compra.fecha }}</td>
+            <td>{{ compra.proveedor }}</td>
+            <td>${{ compra.total }}</td>
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

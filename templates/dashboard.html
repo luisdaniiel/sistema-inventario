@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+
+<h1>Dashboard</h1>
+
+<div class="row mt-4">
+
+    <div class="col-md-3">
+
+        <div class="card card-dashboard">
+
+            <div class="card-body">
+
+                <h5>Productos</h5>
+
+                <a href="/productos"
+                   class="btn btn-primary">
+                   Ver
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card card-dashboard">
+
+            <div class="card-body">
+
+                <h5>Proveedores</h5>
+
+                <a href="/proveedores"
+                   class="btn btn-success">
+                   Ver
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card card-dashboard">
+
+            <div class="card-body">
+
+                <h5>Compras</h5>
+
+                <a href="/compras"
+                   class="btn btn-info">
+                   Ver
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card card-dashboard">
+
+            <div class="card-body">
+
+                <h5>Ventas</h5>
+
+                <a href="/ventas"
+                   class="btn btn-danger">
+                   Ver
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

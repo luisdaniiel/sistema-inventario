@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informes Financieros</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --verde:   #10B981;
+            --verde-bg: #ECFDF5;
+            --rojo:    #EF4444;
+            --rojo-bg: #FEF2F2;
+            --azul:    #6366F1;
+            --azul-bg: #EEF2FF;
+            --gris-bg: #F1F5F9;
+            --gris-borde: #E2E8F0;
+            --texto:   #0F172A;
+            --texto-suave: #64748B;
+            --blanco:  #FFFFFF;
+            --sombra:  0 1px 3px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.06);
+        }
+
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: var(--gris-bg);
+            color: var(--texto);
+            min-height: 100vh;
+        }
+
+        /* ── HEADER ── */
+        .page-header {
+            background: var(--texto);
+            color: var(--blanco);
+            padding: 28px 40px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .page-header .icono { font-size: 28px; }
+        .page-header h1 { font-size: 22px; font-weight: 700; letter-spacing: -.3px; }
+        .page-header p  { font-size: 13px; color: #94A3B8; margin-top: 2px; }
+
+        /* ── CONTENIDO ── */
+        .page-body { max-width: 1100px; margin: 0 auto; padding: 36px 24px 60px; }
+
+        /* ── SECCIÓN ── */
+        .seccion { margin-bottom: 48px; }
+        .seccion-titulo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .seccion-titulo .emoji { font-size: 20px; }
+        .seccion-titulo h2 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--texto);
+            letter-spacing: -.2px;
+        }
+        .seccion-titulo .linea {
+            flex: 1;
+            height: 1px;
+            background: var(--gris-borde);
+        }
+
+        /* ── GRID DE CARDS ── */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 18px;
+        }
+
+        /* ── CARD ── */
+        .card {
+            background: var(--blanco);
+            border-radius: 14px;
+            box-shadow: var(--sombra);
+            overflow: hidden;
+        }
+        .card-barra {
+            height: 4px;
+            width: 100%;
+        }
+        .card-barra.verde  { background: var(--verde); }
+        .card-barra.rojo   { background: var(--rojo);  }
+        .card-barra.azul   { background: var(--azul);  }
+
+        .card-inner { padding: 22px 24px 24px; }
+
+        .card-etiqueta {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .8px;
+            color: var(--texto-suave);
+            margin-bottom: 12px;
+        }
+
+        .card-icono-valor {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .card-burbuja {
+            width: 38px; height: 38px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .card-burbuja.verde { background: var(--verde-bg); }
+        .card-burbuja.rojo  { background: var(--rojo-bg);  }
+        .card-burbuja.azul  { background: var(--azul-bg);  }
+
+        .card-valor {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.1;
+        }
+        .card-valor.verde { color: var(--verde); }
+        .card-valor.rojo  { color: var(--rojo);  }
+        .card-valor.azul  { color: var(--azul);  }
+
+        /* ── TABLA ── */
+        .tabla-wrapper {
+            background: var(--blanco);
+            border-radius: 14px;
+            box-shadow: var(--sombra);
+            overflow: hidden;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        thead tr { background: #F8FAFC; }
+        thead th {
+            padding: 14px 20px;
+            text-align: left;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .7px;
+            color: var(--texto-suave);
+            border-bottom: 1px solid var(--gris-borde);
+        }
+        tbody tr {
+            border-bottom: 1px solid var(--gris-borde);
+            transition: background .15s;
+        }
+        tbody tr:last-child { border-bottom: none; }
+        tbody tr:hover { background: #F8FAFC; }
+        tbody td {
+            padding: 14px 20px;
+            color: var(--texto);
+            font-weight: 500;
+        }
+
+        /* Badge de stock bajo */
+        .badge-alerta {
+            display: inline-block;
+            background: var(--rojo-bg);
+            color: var(--rojo);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 2px 10px;
+            border-radius: 20px;
+        }
+
+        /* Número ranking */
+        .num-rank {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px; height: 24px;
+            background: var(--gris-bg);
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--texto-suave);
+            margin-right: 8px;
+        }
+
+        /* ── VOLVER ── */
+        .footer-link {
+            text-align: center;
+            margin-top: 40px;
+        }
+        .btn-volver {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--texto);
+            color: var(--blanco);
+            text-decoration: none;
+            padding: 12px 28px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: opacity .2s;
+        }
+        .btn-volver:hover { opacity: .85; }
+
+        @media (max-width: 600px) {
+            .page-header { padding: 20px; }
+            .page-body   { padding: 24px 16px 48px; }
+            .card-valor  { font-size: 22px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="page-header">
+    <span class="icono">📊</span>
+    <div>
+        <h1>Informes Financieros</h1>
+        <p>Resumen de ventas, gastos y utilidad</p>
+    </div>
+</header>
+
+<main class="page-body">
+
+    <!-- ── HOY ── -->
+    <section class="seccion">
+        <div class="seccion-titulo">
+            <span class="emoji">☀️</span>
+            <h2>Resumen de Hoy</h2>
+            <div class="linea"></div>
+        </div>
+
+        <div class="grid-cards">
+            <div class="card">
+                <div class="card-barra verde"></div>
+                <div class="card-inner">
+                    <div class="card-etiqueta">Ventas Hoy</div>
+                    <div class="card-icono-valor">
+                        <div class="card-burbuja verde">💰</div>
+                        <div class="card-valor verde">${{ "{:,.0f}".format(ventas_hoy) }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-barra rojo"></div>
+                <div class="card-inner">
+                    <div class="card-etiqueta">Gastos Hoy</div>
+                    <div class="card-icono-valor">
+                        <div class="card-burbuja rojo">🛒</div>
+                        <div class="card-valor rojo">${{ "{:,.0f}".format(gastos_hoy) }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-barra azul"></div>
+                <div class="card-inner">
+                    <div class="card-etiqueta">Utilidad Hoy</div>
+                    <div class="card-icono-valor">
+                        <div class="card-burbuja azul">📈</div>
+                        <div class="card-valor azul">${{ "{:,.0f}".format(utilidad_hoy) }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── SEMANA ── -->
+    <section class="seccion">
+        <div class="seccion-titulo">
+            <span class="emoji">📅</span>
+            <h2>Informe Semanal</h2>
+            <div class="linea"></div>
+        </div>
+
+        <div class="grid-cards">
+            <div class="card">
+                <div class="card-barra verde"></div>
+                <div class="card-inner">
+                    <div class="card-etiqueta">Ventas Semana</div>
+                    <div class="card-icono-valor">
+                        <div class="card-burbuja verde">💰</div>
+                        <div class="card-valor verde">${{ "{:,.0f}".format(ventas_semana) }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-barra rojo"></div>
+                <div class="card-inner">
+                    <div class="card-etiqueta">Gastos Semana</div>
+                    <div class="card-icono-valor">
+                        <div class="card-burbuja rojo">🛒</div>
+                        <div class="card-valor rojo">${{ "{:,.0f}".format(gastos_semana) }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-barra azul"></div>
+                <div class="card-inner">
+                    <div class="card-etiqueta">Utilidad Semana</div>
+                    <div class="card-icono-valor">
+                        <div class="card-burbuja azul">📈</div>
+                        <div class="card-valor azul">${{ "{:,.0f}".format(utilidad_semana) }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── MES ── -->
+    <section class="seccion">
+        <div class="seccion-titulo">
+            <span class="emoji">📆</span>
+            <h2>Informe Mensual</h2>
+            <div class="linea"></div>
+        </div>
+
+        <div class="grid-cards">
+            <div class="card">
+                <div class="card-barra verde"></div>
+                <div class="card-inner">
+                    <div class="card-etiqueta">Ventas Mes</div>
+                    <div class="card-icono-valor">
+                        <div class="card-burbuja verde">💰</div>
+                        <div class="card-valor verde">${{ "{:,.0f}".format(ventas_mes) }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-barra rojo"></div>
+                <div class="card-inner">
+                    <div class="card-etiqueta">Gastos Mes</div>
+                    <div class="card-icono-valor">
+                        <div class="card-burbuja rojo">🛒</div>
+                        <div class="card-valor rojo">${{ "{:,.0f}".format(gastos_mes) }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-barra azul"></div>
+                <div class="card-inner">
+                    <div class="card-etiqueta">Utilidad Mes</div>
+                    <div class="card-icono-valor">
+                        <div class="card-burbuja azul">📈</div>
+                        <div class="card-valor azul">${{ "{:,.0f}".format(utilidad_mes) }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── TOP 5 PRODUCTOS ── -->
+    <section class="seccion">
+        <div class="seccion-titulo">
+            <span class="emoji">🏆</span>
+            <h2>Top 5 Productos Más Vendidos</h2>
+            <div class="linea"></div>
+        </div>
+
+        <div class="tabla-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Producto</th>
+                        <th>Cantidad Vendida</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for producto in productos_mas_vendidos %}
+                    <tr>
+                        <td><span class="num-rank">{{ loop.index }}</span></td>
+                        <td>{{ producto.nombre }}</td>
+                        <td><strong>{{ producto.total_vendido }}</strong></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- ── PROVEEDORES ── -->
+    <section class="seccion">
+        <div class="seccion-titulo">
+            <span class="emoji">🚚</span>
+            <h2>Proveedores que Más Surten</h2>
+            <div class="linea"></div>
+        </div>
+
+        <div class="tabla-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Proveedor</th>
+                        <th>Compras Registradas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for proveedor in proveedores_top %}
+                    <tr>
+                        <td><span class="num-rank">{{ loop.index }}</span></td>
+                        <td>{{ proveedor.nombre }}</td>
+                        <td><strong>{{ proveedor.total_compras }}</strong></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- ── STOCK BAJO ── -->
+    <section class="seccion">
+        <div class="seccion-titulo">
+            <span class="emoji">⚠️</span>
+            <h2>Productos con Stock Bajo</h2>
+            <div class="linea"></div>
+        </div>
+
+        <div class="tabla-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Stock Actual</th>
+                        <th>Stock Mínimo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for producto in stock_bajo %}
+                    <tr>
+                        <td>{{ producto.nombre }}</td>
+                        <td><span class="badge-alerta">{{ producto.stock_actual }}</span></td>
+                        <td>{{ producto.stock_minimo }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- ── VOLVER ── -->
+    <div class="footer-link">
+        <a href="{{ url_for('dashboard') }}" class="btn-volver">
+            ← Volver al Dashboard
+        </a>
+    </div>
+
+</main>
+
+</body>
+</html>

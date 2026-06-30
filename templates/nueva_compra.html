@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Nueva Compra</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="container mt-5">
+
+<h2>Registrar Compra</h2>
+
+<form action="/compras/guardar" method="POST">
+
+<div class="mb-3">
+
+<label>Proveedor</label>
+
+<select name="id_proveedor"
+        class="form-control">
+
+{% for proveedor in proveedores %}
+
+<option value="{{ proveedor.id_proveedor }}">
+    {{ proveedor.nombre }}
+</option>
+
+{% endfor %}
+
+</select>
+
+</div>
+
+<div class="mb-3">
+
+<label>Producto</label>
+
+<select name="id_producto"
+        class="form-control">
+
+{% for producto in productos %}
+
+<option value="{{ producto.id_producto }}">
+    {{ producto.nombre }}
+</option>
+
+{% endfor %}
+
+</select>
+
+</div>
+
+<div class="mb-3">
+
+<label>Cantidad</label>
+
+<input type="number"
+       name="cantidad"
+       class="form-control"
+       required>
+
+</div>
+
+<div class="mb-3">
+
+<label>Precio Unitario</label>
+
+<input type="number"
+       name="precio_unitario"
+       class="form-control"
+       required>
+
+</div>
+
+<button class="btn btn-primary">
+    Guardar Compra
+</button>
+
+</form>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Nueva Venta</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="container mt-5">
+
+<h2>Registrar Venta</h2>
+
+<form action="/ventas/guardar" method="POST">
+
+<div class="mb-3">
+
+<div class="mb-3">
+
+    <div class="mb-3">
+
+    <label>Nombre del Cliente</label>
+
+    <input
+        type="text"
+        name="cliente"
+        class="form-control"
+        placeholder="Ingrese el nombre del cliente"
+        required>
+
+</div>
+
+</div>
+
+<div class="mb-3">
+
+<label>Producto</label>
+
+<select name="id_producto" class="form-control">
+
+{% for producto in productos %}
+
+<option value="{{ producto.id_producto }}">
+    {{ producto.nombre }}
+</option>
+
+{% endfor %}
+
+</select>
+
+</div>
+
+<div class="mb-3">
+
+<label>Cantidad</label>
+
+<input type="number"
+       name="cantidad"
+       class="form-control"
+       required>
+
+</div>
+
+<button class="btn btn-primary">
+    Registrar Venta
+</button>
+
+</form>
+
+</div>
+
+</body>
+</html>
