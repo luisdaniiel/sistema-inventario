@@ -2,8 +2,21 @@
 
 import os
 
-DB_HOST = os.getenv("MYSQLHOST", "localhost")
-DB_PORT = int(os.getenv("MYSQLPORT", 3306))
-DB_USER = os.getenv("MYSQLUSER", "root")
-DB_PASSWORD = os.getenv("MYSQLPASSWORD", "")
-DB_NAME = os.getenv("MYSQLDATABASE", "inventario_pinturas")
+# =====================================
+# CONFIGURACIÓN DE LA BASE DE DATOS
+# Compatible con Railway y desarrollo local
+# =====================================
+
+DB_HOST = os.getenv("DB_HOST") or os.getenv("MYSQLHOST") or "localhost"
+
+DB_PORT = int(
+    os.getenv("DB_PORT") or
+    os.getenv("MYSQLPORT") or
+    3306
+)
+
+DB_USER = os.getenv("DB_USER") or os.getenv("MYSQLUSER") or "root"
+
+DB_PASSWORD = os.getenv("DB_PASSWORD") or os.getenv("MYSQLPASSWORD") or ""
+
+DB_NAME = os.getenv("DB_NAME") or os.getenv("MYSQLDATABASE") or "inventario_pinturas"
