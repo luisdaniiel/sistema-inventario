@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect
 print(">>> APP ACTUALIZADO <<<")
 import pymysql
+import config
 
 app = Flask(__name__)
 
