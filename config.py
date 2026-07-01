@@ -2,7 +2,8 @@
 
 import os
 
-DB_HOST = os.getenv("DB_HOST", "localhost")
-DB_USER = os.getenv("DB_USER", "root")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "")
-DB_NAME = os.getenv("DB_NAME", "inventario_pinturas")
+DB_HOST = os.getenv("MYSQLHOST", "localhost")
+DB_PORT = int(os.getenv("MYSQLPORT", 3306))
+DB_USER = os.getenv("MYSQLUSER", "root")
+DB_PASSWORD = os.getenv("MYSQLPASSWORD", "")
+DB_NAME = os.getenv("MYSQLDATABASE", "inventario_pinturas")

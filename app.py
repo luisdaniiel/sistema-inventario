@@ -10,10 +10,11 @@ app = Flask(__name__)
 
 def get_connection():
     return pymysql.connect(
-        host="localhost",
-        user="root",
-        password="Apdoke.14777",
-        database="inventario_pinturas",
+        host=config.DB_HOST,
+        port=config.DB_PORT,
+        user=config.DB_USER,
+        password=config.DB_PASSWORD,
+        database=config.DB_NAME,
         cursorclass=pymysql.cursors.DictCursor
     )
 
