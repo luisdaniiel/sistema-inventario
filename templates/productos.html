@@ -5,12 +5,14 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
 
     <h1>Productos</h1>
+
     <a href="/productos/nuevo" class="btn btn-success">
         + Nuevo Producto
     </a>
 
 </div>
- <form method="GET" action="/productos" class="mb-3">
+
+<form method="GET" action="/productos" class="mb-3">
 
     <div class="input-group">
 
@@ -36,6 +38,7 @@
         <tr>
             <th>ID</th>
             <th>Nombre</th>
+            <th>Categoría</th>
             <th>Descripción</th>
             <th>Precio Compra</th>
             <th>Precio Venta</th>
@@ -53,6 +56,7 @@
 
             <td>{{ producto.id_producto }}</td>
             <td>{{ producto.nombre }}</td>
+            <td>{{ producto.categoria }}</td>
             <td>{{ producto.descripcion }}</td>
             <td>${{ producto.precio_compra }}</td>
             <td>${{ producto.precio_venta }}</td>
@@ -67,7 +71,7 @@
 
                 <a href="/productos/eliminar/{{ producto.id_producto }}"
                    class="btn btn-danger btn-sm"
-                   onclick="return confirm('¿Eliminar producto?')">
+                   onclick="return confirm('¿Desactivar producto?')">
                     Desactivar
                 </a>
 
