@@ -125,7 +125,10 @@ def guardar_producto():
 
     codigo = request.form['codigo']
     nombre = request.form['nombre']
+    descripcion = request.form['descripcion']
     marca = request.form['marca']
+    categoria = request.form['categoria']
+    color = request.form['color']
     precio_compra = request.form['precio_compra']
     precio_venta = request.form['precio_venta']
     stock_actual = request.form['stock_actual']
@@ -139,14 +142,17 @@ def guardar_producto():
         (
             codigo,
             nombre,
+            descripcion,
             marca,
+            categoria,
+            color,
             precio_compra,
             precio_venta,
             stock_actual,
             stock_minimo
         )
         VALUES
-        (%s,%s,%s,%s,%s,%s,5)
+        (%s,%s,%s,%s,%s,%s,%s,%s,%s,5)
         """
 
         cursor.execute(
@@ -154,7 +160,10 @@ def guardar_producto():
             (
                 codigo,
                 nombre,
+                descripcion,
                 marca,
+                categoria,
+                color,
                 precio_compra,
                 precio_venta,
                 stock_actual
@@ -165,7 +174,6 @@ def guardar_producto():
     conexion.close()
 
     return redirect('/productos')
-
 @app.route('/productos/editar/<int:id>')
 def editar_producto(id):
 
