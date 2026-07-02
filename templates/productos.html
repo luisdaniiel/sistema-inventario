@@ -60,8 +60,8 @@
             <td>{{ producto.categoria }}</td>
             <td>{{ producto.color }}</td>
             <td>{{ producto.descripcion }}</td>
-            <td>${{ producto.precio_compra }}</td>
-            <td>${{ producto.precio_venta }}</td>
+            <td>${{ "{:,.0f}".format(producto.precio_compra).replace(",", ".") }}</td>
+            <td>${{ "{:,.0f}".format(producto.precio_venta).replace(",", ".") }}</td>
             <td>{{ producto.stock_actual }}</td>
 
             <td>
