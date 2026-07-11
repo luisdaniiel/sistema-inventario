@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 
@@ -30,32 +29,81 @@ body{
     background:#212529;
     color:white;
 
-    padding-top:20px;
+    display:flex;
+    flex-direction:column;
 }
 
-.sidebar h3{
+.logo{
+
     text-align:center;
-    margin-bottom:30px;
+    padding:20px;
+    border-bottom:1px solid #343a40;
+
 }
 
-.sidebar a{
+.logo h3{
+    margin:0;
+}
+
+.menu{
+
+    flex:1;
+    padding-top:15px;
+
+}
+
+.menu a{
 
     display:block;
     color:white;
 
     text-decoration:none;
 
-    padding:15px;
+    padding:15px 20px;
+
 }
 
-.sidebar a:hover{
+.menu a:hover{
+
     background:#343a40;
+
+}
+
+.usuario{
+
+    border-top:1px solid #343a40;
+
+    padding:20px;
+
+    text-align:center;
+
+}
+
+.usuario strong{
+
+    display:block;
+
+    font-size:16px;
+
+}
+
+.usuario small{
+
+    color:#adb5bd;
+
+}
+
+.logout{
+
+    margin-top:15px;
+
 }
 
 .content{
 
     margin-left:250px;
     padding:30px;
+
 }
 
 .card-dashboard{
@@ -64,6 +112,92 @@ body{
     border-radius:15px;
 
     box-shadow:0 0 15px rgba(0,0,0,.1);
+
+}
+.user-menu{
+
+    margin-top:auto;
+
+    position:relative;
+
+    padding:15px;
+
+}
+
+.user-button{
+
+    width:100%;
+
+    border:none;
+
+    background:none;
+
+    color:white;
+
+    text-align:left;
+
+    padding:10px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+.user-button:hover{
+
+    background:#343a40;
+
+}
+
+.user-dropdown{
+
+    display:none;
+
+    position:absolute;
+
+    bottom:60px;
+
+    left:15px;
+
+    width:210px;
+
+    background:white;
+
+    color:black;
+
+    border-radius:10px;
+
+    box-shadow:0 5px 20px rgba(0,0,0,.2);
+
+    overflow:hidden;
+
+}
+
+.user-dropdown a{
+
+    display:block;
+
+    color:#dc3545;
+
+    text-decoration:none;
+
+    padding:12px;
+
+}
+
+.user-dropdown a:hover{
+
+    background:#f4f4f4;
+
+}
+
+.user-info{
+
+    padding:15px;
+
 }
 
 </style>
@@ -74,19 +208,61 @@ body{
 
 <div class="sidebar">
 
-    <h3>🎨 Inventario </h3>
+    <div class="logo">
 
-    <a href="/">🏠 Dashboard</a>
+        <h3>🎨 Inventario</h3>
 
-    <a href="/productos">📦 Productos</a>
+    </div>
 
-    <a href="/proveedores">🚚 Proveedores</a>
+    <div class="menu">
 
-    <a href="/compras">🛒 Compras</a>
+        <a href="/">🏠 Dashboard</a>
 
-    <a href="/ventas">💰 Ventas</a>
+        <a href="/productos">📦 Productos</a>
 
-    <a href="/informes">📊 Informes</a>
+        <a href="/proveedores">🚚 Proveedores</a>
+
+        <a href="/compras">🛒 Compras</a>
+
+        <a href="/ventas">💰 Ventas</a>
+
+        <a href="/informes">📊 Informes</a>
+
+        <a href="/configuracion">⚙ Configuración</a>
+
+
+    </div>
+
+    <div class="user-menu">
+
+    <button class="user-button" onclick="toggleMenu()">
+
+        👤 {{ session['nombre'] }}
+
+        ▼ 
+
+    </button>
+
+    <div class="user-dropdown" id="userDropdown">
+
+        <div class="user-info">
+
+            <strong>{{ session['nombre'] }}</strong><br>
+
+            <small>{{ session['rol'] }}</small>
+
+        </div>
+
+        <hr>
+
+       <a href="/logout"
+         class="btn btn-danger text-white w-100">
+            Cerrar sesión
+        </a>
+
+    </div>
+
+</div>
 
 </div>
 
@@ -97,6 +273,32 @@ body{
 {% endblock %}
 
 </div>
+<script>
 
+function toggleMenu(){
+
+    const menu=document.getElementById("userDropdown");
+
+    if(menu.style.display==="block")
+
+        menu.style.display="none";
+
+    else
+
+        menu.style.display="block";
+
+}
+
+window.onclick=function(event){
+
+    if(!event.target.closest(".user-menu")){
+
+        document.getElementById("userDropdown").style.display="none";
+
+    }
+
+}
+
+</script>
 </body>
 </html>

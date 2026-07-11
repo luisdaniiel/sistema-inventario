@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+
+<h2 class="mb-4">
+    ⚙ Configuración
+</h2>
+
+<!-- SEGURIDAD -->
+
+<h5 class="mt-4">SEGURIDAD</h5>
+<hr>
+
+<div class="list-group mb-4">
+
+    <a href="/cambiar_password"
+       class="list-group-item list-group-item-action">
+
+        🔒 <strong>Cambiar contraseña</strong>
+
+        <br>
+
+        <small class="text-muted">
+            Cambia la contraseña del usuario actual.
+        </small>
+
+    </a>
+
+</div>
+
+
+<!-- RESPALDOS -->
+
+<h5>RESPALDOS</h5>
+<hr>
+
+<div class="list-group mb-4">
+
+    <a href="/backups"
+       class="list-group-item list-group-item-action">
+
+        💾 <strong>Copias de seguridad</strong>
+
+        <br>
+
+        <small class="text-muted">
+            Crear y restaurar copias de seguridad.
+        </small>
+
+    </a>
+
+</div>
+
+
+<!-- SISTEMA -->
+
+<h5>SISTEMA</h5>
+<hr>
+
+<div class="list-group">
+
+    <a href="/acerca"
+       class="list-group-item list-group-item-action">
+
+        ℹ <strong>Acerca del sistema</strong>
+
+        <br>
+
+        <small class="text-muted">
+
+            Información de la versión instalada.
+
+        </small>
+
+    </a>
+
+</div>
+
+{% endblock %}

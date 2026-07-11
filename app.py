@@ -1,28 +1,153 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session, flash
 print(">>> APP ACTUALIZADO <<<")
 import pymysql
 import config
-
+from flask import Blueprint
+from werkzeug.security import (
+    check_password_hash,
+    generate_password_hash
+)
 app = Flask(__name__)
+from database.db import get_connection
+conexion = get_connection()
+app.secret_key = "Inventario2026SuperSeguro"
+@app.before_request
+def verificar_login():
+
+    rutas_publicas = [
+        'login',
+        'static'
+    ]
+
+    if request.endpoint in rutas_publicas:
+        return
+
+    if 'usuario' not in session:
+        return redirect('/login')
 
 # =====================================
 # CONEXIÓN A MYSQL
 # =====================================
 
-def get_connection():
-    return pymysql.connect(
-        host=config.DB_HOST,
-        port=config.DB_PORT,
-        user=config.DB_USER,
-        password=config.DB_PASSWORD,
-        database=config.DB_NAME,
-        cursorclass=pymysql.cursors.DictCursor
-    )
 
 # =====================================
 # DASHBOARD PRINCIPAL
 # =====================================
+@app.route('/login', methods=['GET', 'POST'])
+def login():
 
+    if request.method == 'POST':
+
+        usuario = request.form['usuario']
+        contrasena = request.form['contrasena']
+
+        conexion = get_connection()
+
+        with conexion.cursor() as cursor:
+
+            cursor.execute(
+                """
+                SELECT *
+                FROM usuarios
+                WHERE usuario = %s
+                """,
+                (usuario,)
+            )
+
+            usuario_db = cursor.fetchone()
+
+        conexion.close()
+
+        if usuario_db:
+
+            if check_password_hash(
+                usuario_db['contrasena'],
+                contrasena
+            ):
+
+                session['id_usuario'] = usuario_db['id_usuario']
+                session['usuario'] = usuario_db['usuario']
+                session['nombre'] = usuario_db['nombre']
+                session['rol'] = usuario_db['rol']
+                print("SESION DESPUES DEL LOGIN:", dict(session))
+                return redirect('/')
+
+        flash("Usuario o contraseña incorrectos")
+
+    return render_template('login.html')
+@app.route('/logout')
+def logout():
+
+    session.clear()
+
+    return redirect('/login')
+
+@app.route('/cambiar_password', methods=['GET', 'POST'])
+def cambiar_password():
+    print("SESION EN CAMBIAR PASSWORD:", dict(session))
+    if 'id_usuario' not in session:
+        return redirect('/login')
+
+    conexion = get_connection()
+
+    with conexion.cursor() as cursor:
+
+        cursor.execute("""
+            SELECT *
+            FROM usuarios
+            WHERE id_usuario=%s
+        """, (session['id_usuario'],))
+
+        usuario = cursor.fetchone()
+
+    if request.method == 'POST':
+
+        actual = request.form['actual']
+        nueva = request.form['nueva']
+        confirmar = request.form['confirmar']
+
+        if not check_password_hash(usuario['contrasena'], actual):
+
+            conexion.close()
+
+            return render_template(
+                'cambiar_password.html',
+                error="La contraseña actual es incorrecta."
+            )
+
+        if nueva != confirmar:
+
+            conexion.close()
+
+            return render_template(
+                'cambiar_password.html',
+                error="Las nuevas contraseñas no coinciden."
+            )
+
+        nuevo_hash = generate_password_hash(nueva)
+
+        with conexion.cursor() as cursor:
+
+            cursor.execute("""
+                UPDATE usuarios
+                SET contrasena=%s
+                WHERE id_usuario=%s
+            """, (
+                nuevo_hash,
+                session['id_usuario']
+            ))
+
+        conexion.commit()
+        conexion.close()
+
+        return render_template(
+            'cambiar_password.html',
+            exito="Contraseña actualizada correctamente."
+        )
+
+    conexion.close()
+
+    return render_template('cambiar_password.html')
 @app.route('/')
 def dashboard():
 
@@ -876,6 +1001,27 @@ def informes():
         proveedores_top=proveedores_top,
         stock_bajo=stock_bajo
     )
+@app.route('/configuracion')
+def configuracion():
+
+    if 'usuario' not in session:
+        return redirect('/login')
+
+    return render_template('configuracion.html')
+@app.route('/acerca')
+def acerca():
+
+    if 'usuario' not in session:
+        return redirect('/login')
+
+    return render_template('acerca.html')
+@app.route('/backups')
+def backups():
+
+    if 'usuario' not in session:
+        return redirect('/login')
+
+    return render_template('backups.html')
 # =====================================
 # INICIAR SERVIDOR
 # =====================================
