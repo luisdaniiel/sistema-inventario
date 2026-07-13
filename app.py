@@ -34,7 +34,15 @@ def verificar_login():
 # =====================================
 # CONEXIÓN A MYSQL
 # =====================================
-
+def get_connection():
+    return pymysql.connect(
+        host=config.DB_HOST,
+        port=config.DB_PORT,
+        user=config.DB_USER,
+        password=config.DB_PASSWORD,
+        database=config.DB_NAME,
+        cursorclass=pymysql.cursors.DictCursor
+    )
 
 # =====================================
 # DASHBOARD PRINCIPAL
@@ -48,14 +56,9 @@ def login():
         contrasena = request.form['contrasena']
 
         conexion = get_connection()
+
         with conexion.cursor() as cursor:
-           
 
-            cursor.execute("SELECT DATABASE()")
-            print(">>> DATABASE:", cursor.fetchone())
-
-            cursor.execute("SHOW CREATE TABLE usuarios")
-            print(">>> TABLA:", cursor.fetchone())
             cursor.execute(
                 """
                 SELECT *
