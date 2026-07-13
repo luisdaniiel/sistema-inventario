@@ -10,6 +10,12 @@ from werkzeug.security import (
 app = Flask(__name__)
 from database.db import get_connection
 conexion = get_connection()
+with conexion.cursor() as cursor:
+    cursor.execute("SELECT DATABASE()")
+    print(">>> BASE DE DATOS:", cursor.fetchone())
+
+    cursor.execute("SHOW COLUMNS FROM usuarios")
+    print(">>> COLUMNAS:", cursor.fetchall())
 app.secret_key = "Inventario2026SuperSeguro"
 @app.before_request
 def verificar_login():
@@ -42,9 +48,14 @@ def login():
         contrasena = request.form['contrasena']
 
         conexion = get_connection()
-
         with conexion.cursor() as cursor:
+           
 
+            cursor.execute("SELECT DATABASE()")
+            print(">>> DATABASE:", cursor.fetchone())
+
+            cursor.execute("SHOW CREATE TABLE usuarios")
+            print(">>> TABLA:", cursor.fetchone())
             cursor.execute(
                 """
                 SELECT *
