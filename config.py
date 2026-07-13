@@ -1,7 +1,15 @@
 import os
 
-DB_HOST = os.getenv("DB_HOST", "localhost")
-DB_PORT = int(os.getenv("DB_PORT", 3306))
-DB_USER = os.getenv("DB_USER", "root")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "Apdoke.14777")
-DB_NAME = os.getenv("DB_NAME", "inventario_pinturas")
+DB_HOST = os.getenv("DB_HOST") or os.getenv("MYSQLHOST") or "localhost"
+
+DB_PORT = int(
+    os.getenv("DB_PORT")
+    or os.getenv("MYSQLPORT")
+    or "3306"
+)
+
+DB_USER = os.getenv("DB_USER") or os.getenv("MYSQLUSER") or "root"
+
+DB_PASSWORD = os.getenv("DB_PASSWORD") or os.getenv("MYSQLPASSWORD") or ""
+
+DB_NAME = os.getenv("DB_NAME") or os.getenv("MYSQLDATABASE") or "inventario_pinturas"
