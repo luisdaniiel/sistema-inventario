@@ -58,6 +58,11 @@ def login():
         conexion = get_connection()
 
         with conexion.cursor() as cursor:
+            cursor.execute("SHOW CREATE TABLE usuarios")
+            tabla = cursor.fetchone()
+
+            print("TABLA COMPLETA:")
+            print(tabla["Create Table"])
 
             cursor.execute(
                 """
