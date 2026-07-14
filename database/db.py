@@ -4,6 +4,11 @@ import config
 
 def get_connection():
 
+    print("HOST:", config.DB_HOST)
+    print("PORT:", config.DB_PORT)
+    print("USER:", config.DB_USER)
+    print("DATABASE:", config.DB_NAME)
+
     return pymysql.connect(
         host=config.DB_HOST,
         user=config.DB_USER,

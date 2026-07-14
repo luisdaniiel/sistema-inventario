@@ -9,6 +9,11 @@ from werkzeug.security import (
 )
 app = Flask(__name__)
 from database.db import get_connection
+import os
+
+print("DB_NAME =", os.getenv("DB_NAME"))
+print("MYSQLDATABASE =", os.getenv("MYSQLDATABASE"))
+print("config.DB_NAME =", config.DB_NAME)
 conexion = get_connection()
 with conexion.cursor() as cursor:
     cursor.execute("SELECT DATABASE()")
