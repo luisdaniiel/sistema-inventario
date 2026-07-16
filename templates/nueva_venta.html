@@ -3,11 +3,11 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<title>Nueva Venta</title>
+    <title>Nueva Venta</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 
 </head>
 
@@ -15,65 +15,102 @@
 
 <div class="container mt-5">
 
-<h2>Registrar Venta</h2>
+    <h2>Registrar Venta</h2>
 
-<form action="/ventas/guardar" method="POST">
+    <form action="/ventas/guardar" method="POST">
 
-<div class="mb-3">
+        <div class="mb-3">
 
-<div class="mb-3">
+            <label>Nombre del Cliente</label>
 
-    <div class="mb-3">
+            <input
+                type="text"
+                name="cliente"
+                class="form-control"
+                placeholder="Ingrese el nombre del cliente"
+                required>
 
-    <label>Nombre del Cliente</label>
+        </div>
 
-    <input
-        type="text"
-        name="cliente"
-        class="form-control"
-        placeholder="Ingrese el nombre del cliente"
-        required>
+        <div class="mb-3">
+
+            <label>Producto</label>
+
+            <select
+                name="id_producto"
+                id="producto"
+                class="form-control">
+
+                {% for producto in productos %}
+
+                <option
+                    value="{{ producto.id_producto }}"
+                    data-descripcion="{{ producto.descripcion }}">
+
+                    {{ producto.nombre }}
+
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>Unidad</label>
+
+            <input
+                type="text"
+                id="unidad"
+                class="form-control"
+                readonly>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>Cantidad</label>
+
+            <input
+                type="number"
+                name="cantidad"
+                class="form-control"
+                step="0.01"
+                min="0.01"
+                placeholder="Ej: 0.25"
+                required>
+
+        </div>
+
+        <button class="btn btn-primary">
+            Registrar Venta
+        </button>
+
+    </form>
 
 </div>
 
-</div>
+<script>
 
-<div class="mb-3">
+const producto = document.getElementById("producto");
+const unidad = document.getElementById("unidad");
 
-<label>Producto</label>
+function actualizarUnidad() {
 
-<select name="id_producto" class="form-control">
+    const opcion = producto.options[producto.selectedIndex];
 
-{% for producto in productos %}
+    unidad.value = opcion.dataset.descripcion || "";
 
-<option value="{{ producto.id_producto }}">
-    {{ producto.nombre }}
-</option>
+}
 
-{% endfor %}
+producto.addEventListener("change", actualizarUnidad);
 
-</select>
+// Mostrar la unidad del primer producto al cargar la página
+actualizarUnidad();
 
-</div>
-
-<div class="mb-3">
-
-<label>Cantidad</label>
-
-<input type="number"
-       name="cantidad"
-       class="form-control"
-       required>
-
-</div>
-
-<button class="btn btn-primary">
-    Registrar Venta
-</button>
-
-</form>
-
-</div>
+</script>
 
 </body>
 </html>

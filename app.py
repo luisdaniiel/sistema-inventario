@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, session, flash
 print(">>> APP ACTUALIZADO <<<")
 import pymysql
+from decimal import Decimal
 import config
 from flask import Blueprint
 from werkzeug.security import (
@@ -753,7 +754,7 @@ def guardar_venta():
 
     nombre_cliente = request.form['cliente']
     id_producto = request.form['id_producto']
-    cantidad = int(request.form['cantidad'])
+    cantidad = Decimal(request.form['cantidad'])
 
     conexion = get_connection()
 
