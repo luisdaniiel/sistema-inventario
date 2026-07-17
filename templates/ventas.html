@@ -12,6 +12,7 @@
     </a>
 
 </div>
+
 <form method="GET" action="/ventas" class="mb-3">
 
     <div class="input-group">
@@ -39,6 +40,9 @@
             <th>ID</th>
             <th>Fecha</th>
             <th>Cliente</th>
+            <th>Producto</th>
+            <th>Unidad</th>
+            <th>Cantidad</th>
             <th>Total</th>
         </tr>
 
@@ -51,9 +55,18 @@
         <tr>
 
             <td>{{ venta.id_venta }}</td>
-            <td>{{ venta.fecha }}</td>
+
+            <td>{{ venta.fecha.strftime('%d/%m/%Y %H:%M') if venta.fecha else '' }}</td>
+
             <td>{{ venta.cliente }}</td>
-            <td>${{ venta.total }}</td>
+
+            <td>{{ venta.producto }}</td>
+
+            <td>{{ venta.unidad }}</td>
+
+            <td>{{ venta.cantidad }}</td>
+
+            <td>${{ "{:,.0f}".format(venta.total).replace(",", ".") }}</td>
 
         </tr>
 

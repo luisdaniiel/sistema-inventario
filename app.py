@@ -705,18 +705,25 @@ def ventas():
     with conexion.cursor() as cursor:
 
         cursor.execute("""
-        SELECT
-            v.id_venta,
-            v.fecha,
-            v.total,
-            c.nombre AS cliente
-        FROM ventas v
-        INNER JOIN clientes c
-            ON v.id_cliente = c.id_cliente
-        WHERE c.nombre LIKE %s
-        ORDER BY v.id_venta DESC
-        """,
-        (f"%{busqueda}%",))
+            SELECT
+                v.id_venta,
+                v.fecha,
+                c.nombre AS cliente,
+                p.nombre AS producto,
+                p.descripcion AS unidad,
+                dv.cantidad,
+                v.total
+            FROM ventas v
+            INNER JOIN clientes c
+                ON v.id_cliente = c.id_cliente
+            INNER JOIN detalle_ventas dv
+                ON v.id_venta = dv.id_venta
+            INNER JOIN productos p
+                ON dv.id_producto = p.id_producto
+            WHERE c.nombre LIKE %s
+            ORDER BY v.id_venta DESC
+            """,
+            (f"%{busqueda}%",))
 
         ventas = cursor.fetchall()
 
