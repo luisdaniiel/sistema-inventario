@@ -4,6 +4,7 @@ import pymysql
 from decimal import Decimal
 import config
 from flask import Blueprint
+from flask import jsonify
 from werkzeug.security import (
     check_password_hash,
     generate_password_hash
@@ -752,9 +753,11 @@ def nueva_venta():
 
     with conexion.cursor() as cursor:
 
-        cursor.execute(
-            "SELECT * FROM productos"
-        )
+        cursor.execute("""
+            SELECT DISTINCT nombre
+            FROM productos
+            ORDER BY nombre
+            """)
 
         productos = cursor.fetchall()
 
@@ -764,6 +767,49 @@ def nueva_venta():
         'nueva_venta.html',
         productos=productos
     )
+
+@app.route('/productos/colores/<nombre>')
+def obtener_colores(nombre):
+
+    conexion = get_connection()
+
+    with conexion.cursor() as cursor:
+
+        cursor.execute("""
+            SELECT DISTINCT color
+            FROM productos
+            WHERE nombre=%s
+            ORDER BY color
+        """, (nombre,))
+
+        colores = cursor.fetchall()
+
+    conexion.close()
+
+    return jsonify(colores)
+
+@app.route('/productos/unidades/<nombre>/<color>')
+def obtener_unidades(nombre, color):
+
+    conexion = get_connection()
+
+    with conexion.cursor() as cursor:
+
+        cursor.execute("""
+            SELECT
+                id_producto,
+                descripcion
+            FROM productos
+            WHERE nombre=%s
+              AND color=%s
+            ORDER BY descripcion
+        """, (nombre, color))
+
+        unidades = cursor.fetchall()
+
+    conexion.close()
+
+    return jsonify(unidades)
 
 @app.route('/ventas/guardar', methods=['POST'])
 def guardar_venta():

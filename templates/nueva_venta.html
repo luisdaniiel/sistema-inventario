@@ -36,36 +36,38 @@
 
             <label>Producto</label>
 
-            <select
-                name="id_producto"
-                id="producto"
-                class="form-control">
+                <select id="producto" class="form-control">
+                    <option value="">Seleccione...</option>
 
-                {% for producto in productos %}
+                    {% for producto in productos %}
+                        <option value="{{ producto.nombre }}">
+                            {{ producto.nombre }}
+                        </option>
+                    {% endfor %}
+             </select>
 
-                <option
-                    value="{{ producto.id_producto }}"
-                    data-descripcion="{{ producto.descripcion }}">
+        </div>
 
-                    {{ producto.nombre }}
+        <div class="mb-3">  
+            <label>Color</label>
 
-                </option>
-
-                {% endfor %}
-
-            </select>
-
+                <select id="color" class="form-control">
+                    <option value="">Seleccione...</option>
+                </select>
         </div>
 
         <div class="mb-3">
 
             <label>Unidad</label>
 
-            <input
-                type="text"
-                id="unidad"
-                class="form-control"
-                readonly>
+        <select
+            id="id_producto"
+            name="id_producto"
+            class="form-control">
+
+            <option value="">Seleccione...</option>
+
+        </select>
 
         </div>
 
@@ -95,22 +97,63 @@
 <script>
 
 const producto = document.getElementById("producto");
-const unidad = document.getElementById("unidad");
+const color = document.getElementById("color");
+const unidad = document.getElementById("id_producto");
 
-function actualizarUnidad() {
+producto.addEventListener("change", function () {
 
-    const opcion = producto.options[producto.selectedIndex];
+    color.innerHTML =
+        '<option value="">Seleccione...</option>';
 
-    unidad.value = opcion.dataset.descripcion || "";
+    unidad.innerHTML =
+        '<option value="">Seleccione...</option>';
 
-}
+    fetch("/productos/colores/" + producto.value)
 
-producto.addEventListener("change", actualizarUnidad);
+        .then(res => res.json())
 
-// Mostrar la unidad del primer producto al cargar la página
-actualizarUnidad();
+        .then(data => {
+
+            data.forEach(c => {
+
+                color.innerHTML +=
+                    `<option value="${c.color}">
+                        ${c.color}
+                    </option>`;
+
+            });
+
+        });
+
+});
+
+color.addEventListener("change", function () {
+
+    unidad.innerHTML =
+        '<option value="">Seleccione...</option>';
+
+    fetch("/productos/unidades/" +
+        producto.value +
+        "/" +
+        color.value)
+
+        .then(res => res.json())
+
+        .then(data => {
+
+            data.forEach(u => {
+
+                unidad.innerHTML +=
+                    `<option value="${u.id_producto}">
+                        ${u.descripcion}
+                    </option>`;
+
+            });
+
+        });
+
+});
 
 </script>
-
 </body>
 </html>
