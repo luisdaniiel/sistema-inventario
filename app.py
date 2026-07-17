@@ -9,6 +9,15 @@ from werkzeug.security import (
     generate_password_hash
 )
 app = Flask(__name__)
+@app.template_filter('cantidad')
+def formato_cantidad(valor):
+
+    valor = float(valor)
+
+    if valor.is_integer():
+        return str(int(valor))
+
+    return "{:g}".format(valor).replace(".", ",")
 from database.db import get_connection
 import os
 

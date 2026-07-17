@@ -62,7 +62,7 @@
             <td>{{ producto.descripcion }}</td>
             <td>${{ "{:,.0f}".format(producto.precio_compra).replace(",", ".") }}</td>
             <td>${{ "{:,.0f}".format(producto.precio_venta).replace(",", ".") }}</td>
-            <td>{{ producto.stock_actual }}</td>
+            <td>{{ producto.stock_actual | cantidad }}</td>
 
             <td>
 

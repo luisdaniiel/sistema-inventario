@@ -382,7 +382,7 @@
                     <tr>
                         <td><span class="num-rank">{{ loop.index }}</span></td>
                         <td>{{ producto.nombre }}</td>
-                        <td><strong>{{ producto.total_vendido }}</strong></td>
+                        <td><strong>{{ producto.total_vendido | cantidad }}</strong></td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -441,8 +441,12 @@
                     {% for producto in stock_bajo %}
                     <tr>
                         <td>{{ producto.nombre }}</td>
-                        <td><span class="badge-alerta">{{ producto.stock_actual }}</span></td>
-                        <td>{{ producto.stock_minimo }}</td>
+                        <td>
+                            <span class="badge-alerta">
+                                {{ producto.stock_actual | cantidad }}
+                            </span>
+                        </td>
+                        <td>{{ producto.stock_minimo | cantidad }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
