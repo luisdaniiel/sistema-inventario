@@ -36,38 +36,53 @@
 
             <label>Producto</label>
 
-                <select id="producto" class="form-control">
-                    <option value="">Seleccione...</option>
+            <select
+                id="producto"
+                class="form-control"
+                required>
 
-                    {% for producto in productos %}
-                        <option value="{{ producto.nombre }}">
-                            {{ producto.nombre }}
-                        </option>
-                    {% endfor %}
-             </select>
+                <option value="">Seleccione...</option>
+
+                {% for producto in productos %}
+
+                <option value="{{ producto.nombre }}">
+                    {{ producto.nombre }}
+                </option>
+
+                {% endfor %}
+
+            </select>
 
         </div>
 
-        <div class="mb-3">  
+        <div class="mb-3">
+
             <label>Color</label>
 
-                <select id="color" class="form-control">
-                    <option value="">Seleccione...</option>
-                </select>
+            <select
+                id="color"
+                class="form-control"
+                required>
+
+                <option value="">Seleccione...</option>
+
+            </select>
+
         </div>
 
         <div class="mb-3">
 
             <label>Unidad</label>
 
-        <select
-            id="id_producto"
-            name="id_producto"
-            class="form-control">
+            <select
+                id="id_producto"
+                name="id_producto"
+                class="form-control"
+                required>
 
-            <option value="">Seleccione...</option>
+                <option value="">Seleccione...</option>
 
-        </select>
+            </select>
 
         </div>
 
@@ -108,7 +123,9 @@ producto.addEventListener("change", function () {
     unidad.innerHTML =
         '<option value="">Seleccione...</option>';
 
-    fetch("/productos/colores/" + producto.value)
+    if (producto.value === "") return;
+
+    fetch("/productos/colores/" + encodeURIComponent(producto.value))
 
         .then(res => res.json())
 
@@ -132,10 +149,14 @@ color.addEventListener("change", function () {
     unidad.innerHTML =
         '<option value="">Seleccione...</option>';
 
-    fetch("/productos/unidades/" +
-        producto.value +
+    if (color.value === "") return;
+
+    fetch(
+        "/productos/unidades/" +
+        encodeURIComponent(producto.value) +
         "/" +
-        color.value)
+        encodeURIComponent(color.value)
+    )
 
         .then(res => res.json())
 
@@ -155,5 +176,6 @@ color.addEventListener("change", function () {
 });
 
 </script>
+
 </body>
 </html>
