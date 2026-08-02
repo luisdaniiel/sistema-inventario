@@ -36,24 +36,21 @@
 
     .chart-card {
         border: none;
-        border-radius: 18px;
+        border-radius: 16px;
         box-shadow: 0 6px 18px rgba(0,0,0,0.08);
         overflow: hidden;
     }
 
     .chart-card .card-header {
         border: none;
-        padding: 1rem 1.25rem;
+        padding: 0.65rem 1.1rem;
         font-weight: 600;
+        font-size: 0.95rem;
         letter-spacing: 0.3px;
     }
 
-    .chart-header-gradient-blue {
-        background: linear-gradient(135deg, #0d6efd, #4f9bff);
-    }
-
-    .chart-header-gradient-green {
-        background: linear-gradient(135deg, #198754, #38c172);
+    .chart-header-dark {
+        background: linear-gradient(135deg, #1a1f2e, #2c3347);
     }
 </style>
 
@@ -149,7 +146,7 @@
 
         <div class="card chart-card">
 
-            <div class="card-header chart-header-gradient-blue text-white">
+            <div class="card-header chart-header-dark text-white">
 
                 <h5 class="mb-0">
                     📈 Ventas últimos 30 días
@@ -157,7 +154,7 @@
 
             </div>
 
-            <div class="card-body" style="height:350px;">
+            <div class="card-body" style="height:280px;">
 
                 <canvas id="ventasDiariasChart"></canvas>
 
@@ -173,7 +170,7 @@
 
         <div class="card chart-card">
 
-            <div class="card-header chart-header-gradient-green text-white">
+            <div class="card-header chart-header-dark text-white">
 
                 <h5 class="mb-0">
                     📊 Ventas últimos 12 meses
@@ -181,7 +178,7 @@
 
             </div>
 
-            <div class="card-body" style="height:350px;">
+            <div class="card-body" style="height:280px;">
 
                 <canvas id="ventasMensualesChart"></canvas>
 
@@ -237,7 +234,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const ctx = canvas.getContext("2d");
 
             // Gradiente para el relleno del área
-            const gradienteArea = ctx.createLinearGradient(0, 0, 0, 350);
+            const gradienteArea = ctx.createLinearGradient(0, 0, 0, 280);
             gradienteArea.addColorStop(0, "rgba(13,110,253,0.35)");
             gradienteArea.addColorStop(1, "rgba(13,110,253,0.02)");
 
@@ -357,7 +354,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                             beginAtZero: true,
 
-                            grid: { color: "rgba(0,0,0,0.05)" },
+                            grid: { display: false },
 
                             ticks: {
 
@@ -424,7 +421,7 @@ fetch("/api/ventas-mensuales")
         const ctx = canvas.getContext("2d");
 
         // Gradiente para las barras
-        const gradienteBarras = ctx.createLinearGradient(0, 0, 0, 350);
+        const gradienteBarras = ctx.createLinearGradient(0, 0, 0, 280);
         gradienteBarras.addColorStop(0, "#38c172");
         gradienteBarras.addColorStop(1, "#198754");
 
@@ -522,7 +519,7 @@ fetch("/api/ventas-mensuales")
 
                         beginAtZero: true,
 
-                        grid: { color: "rgba(0,0,0,0.05)" },
+                        grid: { display: false },
 
                         ticks: {
 
