@@ -228,6 +228,29 @@ def dashboard():
         ventas=ventas,
         stock_bajo=stock_bajo
     )
+
+@app.route('/api/ventas-diarias')
+def api_ventas_diarias():
+
+    conexion = get_connection()
+
+    with conexion.cursor() as cursor:
+
+        cursor.execute("""
+            SELECT
+                DATE(fecha) AS fecha,
+                SUM(total) AS total
+            FROM ventas
+            WHERE fecha >= CURDATE() - INTERVAL 30 DAY
+            GROUP BY DATE(fecha)
+            ORDER BY DATE(fecha)
+        """)
+
+        datos = cursor.fetchall()
+
+    conexion.close()
+
+    return jsonify(datos)
 # =====================================
 # LISTAR PRODUCTOS
 # =====================================
