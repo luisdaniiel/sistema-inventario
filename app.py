@@ -251,6 +251,30 @@ def api_ventas_diarias():
     conexion.close()
 
     return jsonify(datos)
+
+@app.route('/api/ventas-mensuales')
+def api_ventas_mensuales():
+
+    conexion = get_connection()
+
+    with conexion.cursor() as cursor:
+
+        cursor.execute("""
+            SELECT
+                YEAR(fecha) AS anio,
+                MONTH(fecha) AS mes,
+                SUM(total) AS total
+            FROM ventas
+            WHERE fecha >= DATE_SUB(CURDATE(), INTERVAL 12 MONTH)
+            GROUP BY YEAR(fecha), MONTH(fecha)
+            ORDER BY anio, mes
+        """)
+
+        datos = cursor.fetchall()
+
+    conexion.close()
+
+    return jsonify(datos)
 # =====================================
 # LISTAR PRODUCTOS
 # =====================================

@@ -259,6 +259,102 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
+fetch("/api/ventas-mensuales")
+
+    .then(response => response.json())
+
+    .then(datos => {
+
+        console.log("Ventas mensuales:", datos);
+
+        const nombresMeses = [
+            "",
+            "Ene",
+            "Feb",
+            "Mar",
+            "Abr",
+            "May",
+            "Jun",
+            "Jul",
+            "Ago",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dic"
+        ];
+
+        const etiquetas = datos.map(item =>
+            nombresMeses[item.mes] + " " + item.anio
+        );
+
+        const ventas = datos.map(item => Number(item.total));
+
+        const canvas = document.getElementById("ventasMensualesChart");
+
+        new Chart(canvas, {
+
+            type: "bar",
+
+            data: {
+
+                labels: etiquetas,
+
+                datasets: [{
+
+                    label: "Ventas ($)",
+
+                    data: ventas,
+
+                    backgroundColor: "#198754",
+
+                    borderRadius: 8
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                plugins: {
+
+                    legend: {
+
+                        display: true
+
+                    }
+
+                },
+
+                scales: {
+
+                    y: {
+
+                        beginAtZero: true,
+
+                        ticks: {
+
+                            callback: function(value){
+
+                                return "$" + value.toLocaleString("es-CO");
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        });
+
+    });
+
 </script>
 
 {% endblock %}
