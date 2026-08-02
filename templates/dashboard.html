@@ -88,6 +88,8 @@
 
 <div class="row">
 
+    <!-- Gráfica Ventas Diarias -->
+
     <div class="col-md-6 mb-4">
 
         <div class="card shadow-sm">
@@ -102,13 +104,15 @@
 
             <div class="card-body" style="height:350px;">
 
-              <canvas id="ventasDiariasChart"></canvas>
+                <canvas id="ventasDiariasChart"></canvas>
 
             </div>
 
         </div>
 
     </div>
+
+    <!-- Gráfica Ventas Mensuales -->
 
     <div class="col-md-6 mb-4">
 
@@ -124,7 +128,7 @@
 
             <div class="card-body" style="height:350px;">
 
-                 <canvas id="ventasMensualesChart"></canvas>
+                <canvas id="ventasMensualesChart"></canvas>
 
             </div>
 
@@ -135,89 +139,126 @@
 </div>
 
 {% endblock %}
+
+{% block scripts %}
+
 <script>
 
-fetch("/api/ventas-diarias")
-    .then(response => response.json())
-    .then(datos => {
+document.addEventListener("DOMContentLoaded", function () {
 
-        const etiquetas = datos.map(item => {
+    fetch("/api/ventas-diarias")
 
-            const fecha = new Date(item.fecha);
+        .then(response => response.json())
 
-            return fecha.toLocaleDateString('es-ES', {
-                day: '2-digit',
-                month: '2-digit'
+        .then(datos => {
+
+            console.log("Datos recibidos:", datos);
+
+            const etiquetas = datos.map(item => {
+
+                const fecha = new Date(item.fecha);
+
+                return fecha.toLocaleDateString("es-ES", {
+
+                    day: "2-digit",
+                    month: "2-digit"
+
+                });
+
             });
 
-        });
+            const ventas = datos.map(item => Number(item.total));
 
-        const ventas = datos.map(item => item.total);
+            const canvas = document.getElementById("ventasDiariasChart");
 
-        const ctx = document
-            .getElementById('ventasDiariasChart')
-            .getContext('2d');
+            if (!canvas) {
 
-        new Chart(ctx, {
+                console.error("No se encontró el canvas.");
 
-            type: 'line',
+                return;
 
-            data: {
+            }
 
-                labels: etiquetas,
+            new Chart(canvas, {
 
-                datasets: [{
+                type: "line",
 
-                    label: 'Ventas ($)',
+                data: {
 
-                    data: ventas,
+                    labels: etiquetas,
 
-                    borderColor: '#0d6efd',
+                    datasets: [{
 
-                    backgroundColor: 'rgba(13,110,253,0.15)',
+                        label: "Ventas ($)",
 
-                    fill: true,
+                        data: ventas,
 
-                    tension: 0.3,
+                        borderColor: "#0d6efd",
 
-                    pointRadius: 4,
+                        backgroundColor: "rgba(13,110,253,0.15)",
 
-                    pointHoverRadius: 6
+                        fill: true,
 
-                }]
+                        tension: 0.3,
 
-            },
+                        pointRadius: 4,
 
-            options: {
+                        pointHoverRadius: 6
 
-                responsive: true,
-
-                maintainAspectRatio: false,
-
-                plugins: {
-
-                    legend: {
-
-                        display: true
-
-                    }
+                    }]
 
                 },
 
-                scales: {
+                options: {
 
-                    y: {
+                    responsive: true,
 
-                        beginAtZero: true
+                    maintainAspectRatio: false,
+
+                    plugins: {
+
+                        legend: {
+
+                            display: true
+
+                        }
+
+                    },
+
+                    scales: {
+
+                        y: {
+
+                            beginAtZero: true,
+
+                            ticks: {
+
+                                callback: function(value) {
+
+                                    return "$" + value.toLocaleString("es-CO");
+
+                                }
+
+                            }
+
+                        }
 
                     }
 
                 }
 
-            }
+            });
+
+        })
+
+        .catch(error => {
+
+            console.error("Error cargando la gráfica:", error);
 
         });
 
-    });
+});
 
 </script>
+
+{% endblock %}
