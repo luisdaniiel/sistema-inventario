@@ -615,8 +615,8 @@ def eliminar_proveedor(id):
     conexion.close()
 
     return redirect('/proveedores')
-@app.route('/gastos')
-def gastos():
+@app.route('/compras')
+def compras():
 
     busqueda = request.args.get('busqueda', '')
 
@@ -643,13 +643,13 @@ def gastos():
     conexion.close()
 
     return render_template(
-        'gastos.html',
-        gastos=gastos,
+        'compras.html',
+        compras=compras,
         busqueda=busqueda
     )
 
-@app.route('/gastos/nueva')
-def nuevo_gasto():
+@app.route('/compras/nueva')
+def nueva_compra():
 
     conexion = get_connection()
 
@@ -668,13 +668,13 @@ def nuevo_gasto():
     conexion.close()
 
     return render_template(
-        'nuevo_gasto.html',
+        'nueva_compra.html',
         proveedores=proveedores,
         productos=productos
     )
 
-@app.route('/gastos/guardar', methods=['POST'])
-def guardar_gasto():
+@app.route('/compras/guardar', methods=['POST'])
+def guardar_compra():
 
     id_proveedor = request.form['id_proveedor']
     id_producto = request.form['id_producto']
@@ -750,7 +750,7 @@ def guardar_gasto():
     conexion.commit()
     conexion.close()
 
-    return redirect('/gastos')
+    return redirect('/compras')
 
 @app.route('/ventas')
 def ventas():
